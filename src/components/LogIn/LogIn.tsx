@@ -1,13 +1,16 @@
 "use client";
-import React from "react";
-import { login } from "@/actions";
-import { LogoInput } from "@/components/FormElements/LogoInput";
+import React, { useContext } from "react";
+import { login, navigate } from "@/actions";
+import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { EmailIcon, PasswordIcon } from "@/components/SvgIcons/SvgIcons";
 import ReactLoading from "react-loading";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useColorMode from "@/hooks/useColorMode";
+import { LoggedUserContext } from "@/components/Contexts/LoggedUserContext";
+import { Session } from "@/types/user";
+import { toast } from "@/components/ui/use-toast";
 
 const schema = z.object({
   email: z.string().email(),
@@ -17,6 +20,7 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 const LogInForm = () => {
+  const { setSession } = useContext(LoggedUserContext);
   const [colorMode] = useColorMode();
 
   const {
@@ -30,24 +34,34 @@ const LogInForm = () => {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await login(data);
-    } catch (e) {
-      if (typeof e === "string") {
+      const loginResponse = await login(data);
+      if (loginResponse.session) {
+        setSession(loginResponse);
+        await navigate("/");
+      } else {
         setError("root", {
-          message: e,
+          message: loginResponse.message,
         });
       }
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <LogoInput
+      <label className="my-2.5 block font-medium text-black dark:text-white">
+        Email
+      </label>
+      <Input
         {...register("email")}
         type="text"
         name="email"
         placeholder="Enter your email"
-        label="Email"
         iconComponent={EmailIcon}
       />
       {errors.email && (
@@ -56,12 +70,14 @@ const LogInForm = () => {
         </h3>
       )}
 
-      <LogoInput
+      <label className="my-2.5 block font-medium text-black dark:text-white">
+        Password
+      </label>
+      <Input
         {...register("password")}
         type="password"
         name="password"
         placeholder="Enter your password"
-        label="Password"
         iconComponent={PasswordIcon}
       />
       {errors.password && (
@@ -76,7 +92,7 @@ const LogInForm = () => {
         </div>
       )}
 
-      <div className="mb-5">
+      <div className="my-5">
         {!isSubmitting ? (
           <input
             type="submit"

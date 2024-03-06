@@ -2,12 +2,9 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
 import Link from "next/link";
 
-
 const Profile = () => {
   return (
     <div className="mx-auto max-w-242.5">
-      <Breadcrumb pageName="Profile" />
-
       <div className="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="relative z-20 h-35 md:h-65">
           <Image
@@ -26,12 +23,7 @@ const Profile = () => {
               htmlFor="cover"
               className="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-2 py-1 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4"
             >
-              <input
-                type="file"
-                name="cover"
-                id="cover"
-                className="sr-only"
-              />
+              <input type="file" name="cover" id="cover" className="sr-only" />
               <span>
                 <svg
                   className="fill-current"
@@ -139,9 +131,9 @@ const Profile = () => {
               <p className="mt-4.5">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Pellentesque posuere fermentum urna, eu condimentum mauris
-                tempus ut. Donec fermentum blandit aliquet. Etiam dictum
-                dapibus ultricies. Sed vel aliquet libero. Nunc a augue
-                fermentum, pharetra ligula sed, aliquam lacus.
+                tempus ut. Donec fermentum blandit aliquet. Etiam dictum dapibus
+                ultricies. Sed vel aliquet libero. Nunc a augue fermentum,
+                pharetra ligula sed, aliquam lacus.
               </p>
             </div>
 

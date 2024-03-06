@@ -1,18 +1,12 @@
 "use client";
-
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { NavList } from "./NavList";
-import useColorMode from "@/hooks/useColorMode";
+import { SidebarContext } from "../Contexts/SidebarContext";
 
-interface SidebarProps {
-  sidebarOpen: boolean;
-  setSidebarOpen: (arg: boolean) => void;
-}
-
-const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
-  const [colorMode] = useColorMode();
+const Sidebar = () => {
+  const { sidebarOpen, setSidebarOpen } = useContext(SidebarContext);
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
@@ -52,23 +46,20 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <Link href="/">
-          {colorMode === "dark" ? (
-            <Image
-              width={176}
-              height={32}
-              src={"/images/logo/logo.svg"}
-              alt="Logo"
-              priority
-            />
-          ) : (
-            <Image
-              width={176}
-              height={32}
-              src={"/images/logo/logo-dark.svg"}
-              alt="Logo"
-              priority
-            />
-          )}
+          <Image
+            className="hidden dark:block"
+            src={"/images/logo/logo.svg"}
+            alt="Logo"
+            width={176}
+            height={32}
+          />
+          <Image
+            className="dark:hidden"
+            src={"/images/logo/logo-dark.svg"}
+            alt="Logo"
+            width={176}
+            height={32}
+          />
         </Link>
 
         <button
