@@ -20,20 +20,7 @@ const UserDetails = async (props: { params: { id: string } }) => {
     ],
   });
 
-  return (
-    <div className="mx-auto max-w-270">
-      <Breadcrumb
-        previousPage={{
-          name: "Users list",
-          link: "./users/list",
-        }}
-        pageName={"Details"}
-      />
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <UserForm user={user?.content[0]} />
-      </div>
-    </div>
-  );
+  return <UserForm user={user?.content[0]} />;
 };
 
 export default UserDetails;

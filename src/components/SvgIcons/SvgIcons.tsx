@@ -40,8 +40,8 @@ export const PasswordIcon = (
 
 export const LoginIcon = (
   <svg
-    width="350"
-    height="350"
+    width="320"
+    height="320"
     viewBox="0 0 350 350"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

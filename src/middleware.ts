@@ -3,15 +3,30 @@ import { updateSession } from "./actions";
 import { cookies } from "next/headers";
 
 export async function middleware(request: NextRequest) {
-  const cookiesStore = cookies();
-  const accessToken = cookiesStore.get("session")?.value;
-  if (accessToken) {
-    return await updateSession(request);
-  } else {
-    return NextResponse.redirect(new URL("/login", request.url));
+  const url = request.nextUrl.clone();
+  const excludedPaths = /^(\/_next|\/_axiom|\/_api|\/_public|.*\..*)/;
+  if (!excludedPaths.test(url.pathname)) {
+    if (
+      !request.nextUrl.pathname.endsWith("/login") &&
+      !request.nextUrl.pathname.includes("/activate-account")
+    ) {
+      const cookiesStore = cookies();
+      const accessToken = cookiesStore.get("session")?.value;
+      if (accessToken) {
+        return await updateSession(request);
+      } else {
+        return NextResponse.redirect(new URL("/login", request.url));
+      }
+    }
+
+    if (request.nextUrl.pathname.endsWith("/login")) {
+      const cookiesStore = cookies();
+      const accessToken = cookiesStore.get("session")?.value;
+      if (accessToken) {
+        return NextResponse.redirect(new URL("/", request.url));
+      } else {
+        return NextResponse.next();
+      }
+    }
   }
 }
-
-export const config = {
-  matcher: ["/((?!login|api|_next/static|_next/image|favicon.ico).*)"],
-};

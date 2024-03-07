@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { activateUser } from "@/services/user";
+import { Button } from "@/components/ui/button";
 
 const schema = z.object({
   password: z.string().min(8),
@@ -75,7 +76,7 @@ const ActivateAccountForm = ({ token }: { token: string }) => {
           render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel className="my-2.5 block font-medium text-black dark:text-white">
-                First name
+                New password
               </FormLabel>
               <FormControl>
                 <Input
@@ -97,13 +98,13 @@ const ActivateAccountForm = ({ token }: { token: string }) => {
           render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel className="my-2.5 block font-medium text-black dark:text-white">
-                First name
+                Confirm password
               </FormLabel>
               <FormControl>
                 <Input
                   {...register("confirmPassword")}
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder="Confirm password"
                   iconComponent={PasswordIcon}
                   {...field}
                 />
@@ -121,11 +122,13 @@ const ActivateAccountForm = ({ token }: { token: string }) => {
 
         <div className="my-5">
           {!isSubmitting ? (
-            <input
+            <Button
               type="submit"
               value="Sign In"
               className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
-            />
+            >
+              Activate
+            </Button>
           ) : (
             <div className="bg-gray-500 flex w-full cursor-not-allowed justify-center rounded-lg opacity-70">
               <ReactLoading

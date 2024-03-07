@@ -90,7 +90,7 @@ export async function activateUser(
   token: string,
 ): Promise<any> {
   try {
-    const response = await fetch(azureUrls.users.create + "?token=" + token, {
+    const response = await fetch(azureUrls.users.activate + "?token=" + token, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

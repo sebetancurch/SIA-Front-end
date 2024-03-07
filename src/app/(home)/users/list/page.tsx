@@ -1,12 +1,11 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "@/components/common/Loader";
 import { ListRequest, ListResponse } from "@/types/list-request";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { EmptyList } from "@/components/common/Empty";
-import { Session, User } from "@/types/user";
 import { getUsers } from "@/services/user";
 import { PaginationElement } from "@/components/common/Pagination";
 import CreationDialog from "@/components/Users/creation";
@@ -16,8 +15,7 @@ import {
   filterSchema,
   filterSelections,
 } from "@/app/(home)/users/list/filterFields";
-import { cookies } from "next/headers";
-import { getSessionToken } from "@/actions";
+import { translateRole } from "@/actions/Translators";
 
 export default function UsersTablePage() {
   const [request, setRequest] = useState<ListRequest>({
@@ -105,7 +103,7 @@ export default function UsersTablePage() {
                 </div>
                 <div className="col-span-1 flex items-center">
                   <p className="text-sm text-black dark:text-white">
-                    {user.role}
+                    {translateRole(user.role)}
                   </p>
                 </div>
                 <div className="col-span-1 flex items-center">

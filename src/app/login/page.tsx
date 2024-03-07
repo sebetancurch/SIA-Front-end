@@ -10,26 +10,31 @@ const SignIn: React.FC = () => {
         <div className="flex flex-wrap items-center rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="px-26 py-17.5 text-center">
-              <div className="mb-5.5 inline-block">
-                <Image
-                  className="hidden dark:block"
-                  src={"/images/logo/logo.svg"}
-                  alt="Logo"
-                  width={176}
-                  height={32}
-                />
-                <Image
-                  className="dark:hidden"
-                  src={"/images/logo/logo-dark.svg"}
-                  alt="Logo"
-                  width={176}
-                  height={32}
-                />
+              <div className="mb-4 inline-block">
+                <div className="flex items-center gap-4">
+                  <Image
+                    className="hidden dark:block"
+                    src={"/images/logo/SIA-logo.svg"}
+                    alt="Logo"
+                    width={200}
+                    height={200}
+                  />
+                  <Image
+                    className="dark:hidden"
+                    src={"/images/logo/SIA-logo.svg"}
+                    alt="Logo"
+                    width={200}
+                    height={200}
+                  />
+                  <h4 className="text-7xl font-semibold text-black dark:text-white">
+                    SIA
+                  </h4>
+                </div>
               </div>
 
               <p className="2xl:px-20">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                suspendisse.
+                Welcome to your academic management system!!, log in to your
+                existing account or contact an administrator to get one.
               </p>
 
               <span className="mt-15 inline-block">{LoginIcon}</span>

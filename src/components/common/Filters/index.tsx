@@ -104,7 +104,7 @@ const Filters = ({
     <div>
       <Popover onOpenChange={handleClose}>
         <PopoverTrigger asChild>
-          <Button variant="outline">Filter</Button>
+          <Button>Filter</Button>
         </PopoverTrigger>
         <PopoverContent className="w-80" align="start">
           <Form {...form}>
@@ -209,16 +209,15 @@ const Filters = ({
               ) : (
                 <></>
               )}
-              <Button
-                className="flex justify-center rounded bg-primary px-6 py-3 font-medium text-gray hover:bg-opacity-90"
-                disabled={!selectedFilter}
-                type="submit"
-                // onClick={() => {
-                //   console.log(form.formState.errors);
-                // }}
-              >
-                Add filter
-              </Button>
+              <div className="flex justify-end">
+                <Button
+                  className="flex justify-center rounded bg-primary px-6 py-3 font-medium text-gray hover:bg-opacity-90"
+                  disabled={!selectedFilter}
+                  type="submit"
+                >
+                  Add filter
+                </Button>
+              </div>
             </form>
           </Form>
         </PopoverContent>

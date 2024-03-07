@@ -44,22 +44,27 @@ const Sidebar = () => {
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+      <div className="flex items-center justify-between gap-2 px-6 pt-2 lg:justify-center lg:pt-3.5">
         <Link href="/">
-          <Image
-            className="hidden dark:block"
-            src={"/images/logo/logo.svg"}
-            alt="Logo"
-            width={176}
-            height={32}
-          />
-          <Image
-            className="dark:hidden"
-            src={"/images/logo/logo-dark.svg"}
-            alt="Logo"
-            width={176}
-            height={32}
-          />
+          <div className="flex items-center gap-4">
+            <Image
+              className="hidden dark:block"
+              src={"/images/logo/SIA-logo.svg"}
+              alt="Logo"
+              width={60}
+              height={60}
+            />
+            <Image
+              className="dark:hidden"
+              src={"/images/logo/SIA-logo-dark.svg"}
+              alt="Logo"
+              width={60}
+              height={60}
+            />
+            <h4 className="text-2xl font-semibold text-black dark:text-white">
+              SIA
+            </h4>
+          </div>
         </Link>
 
         <button
