@@ -66,14 +66,6 @@ export const navItems: NavItems[] = [
     icon: SettingsIcon,
   },
   {
-    id: "charts",
-    name: "Charts",
-    isGroup: false,
-    category: "OTHERS",
-    link: "/chart",
-    icon: ChartIcon,
-  },
-  {
     id: "ui",
     name: "UI Elements",
     isGroup: true,
