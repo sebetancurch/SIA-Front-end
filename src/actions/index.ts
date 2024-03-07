@@ -35,7 +35,6 @@ export const login = async ({
   const response = await validateUser(user);
 
   if (response.user) {
-    sessionStorage.setItem("user", JSON.stringify(user));
     // Save the session in a cookie
     cookies().set("session", response.session, {
       // expires,
