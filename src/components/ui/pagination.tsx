@@ -50,7 +50,7 @@ const PaginationLink = ({
     className={cn(
       "hover:cursor-pointer hover:bg-stroke",
       buttonVariants({
-        variant: isActive ? "outline" : "ghost",
+        variant: isActive ? "default" : "ghost",
         size,
       }),
       className,

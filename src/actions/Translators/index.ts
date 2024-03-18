@@ -10,3 +10,16 @@ export const translateRole = (role: string): string => {
       return "";
   }
 };
+
+export const translateState = (role: string): string => {
+  switch (role) {
+    case "ACTIVE":
+      return "Active";
+    case "INACTIVE":
+      return "Inactive";
+    case "PENDING":
+      return "Pending";
+    default:
+      return "";
+  }
+};

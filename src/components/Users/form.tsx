@@ -38,20 +38,18 @@ import { User } from "@/types/user";
 import { createUser, updateUser } from "@/services/user";
 
 const formSchema = z.object({
-  firstName: z.string({
-    required_error: "A name is required.",
+  firstName: z.string().trim().min(1, {
+    message: "A name is required.",
   }),
-  lastName: z.string({
-    required_error: "A last name is required.",
+  lastName: z.string().trim().min(1, {
+    message: "A last name is required.",
   }),
-  phone: z.coerce.number(),
-  email: z
-    .string({
-      required_error: "An email is required.",
-    })
-    .email({
-      message: "Write a correct email",
-    }),
+  phone: z.number().min(1, {
+    message: "Write a phone number",
+  }),
+  email: z.string().trim().email({
+    message: "Write a correct email",
+  }),
   // program: z.string(),
   role: z.enum(["ADMIN", "PROFESSOR", "STUDENT"]),
   gender: z.enum(["Male", "Female"]),
@@ -74,7 +72,11 @@ const UserForm = ({ user }: { user?: User }) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+    },
   });
 
   const { control } = form;
@@ -83,7 +85,11 @@ const UserForm = ({ user }: { user?: User }) => {
 
   useEffect(() => {
     if (user) {
-      form.reset({ ...user, birthday: new Date(user.birthday) });
+      form.reset({
+        ...user,
+        birthday: new Date(user.birthday),
+      });
+      form.setValue("gender", user.gender);
     }
   }, []);
 
@@ -208,7 +214,8 @@ const UserForm = ({ user }: { user?: User }) => {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          type="text"
+                          // type="text"
+                          inputMode="numeric"
                           placeholder="Phone number"
                           {...field}
                         />
@@ -314,6 +321,7 @@ const UserForm = ({ user }: { user?: User }) => {
                       </FormLabel>
                       <Select
                         onValueChange={field.onChange}
+                        value={field.value}
                         defaultValue={field.value}
                       >
                         <FormControl>
@@ -360,7 +368,7 @@ const UserForm = ({ user }: { user?: User }) => {
                         </PopoverTrigger>
 
                         {user ? (
-                          <PopoverContent align="start" className=" w-auto p-0">
+                          <PopoverContent align="start" className="w-auto p-0">
                             <Calendar
                               mode="single"
                               selected={field.value}

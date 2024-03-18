@@ -1,10 +1,11 @@
 import React from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
+import { LoggedUserProvider } from "@/components/Contexts/LoggedUserContext";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <LoggedUserProvider>
       {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className="flex h-screen overflow-hidden">
         {/* <!-- ===== Sidebar Start ===== --> */}
@@ -28,6 +29,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* <!-- ===== Content Area End ===== --> */}
       </div>
       {/* <!-- ===== Page Wrapper End ===== --> */}
-    </>
+    </LoggedUserProvider>
   );
 }

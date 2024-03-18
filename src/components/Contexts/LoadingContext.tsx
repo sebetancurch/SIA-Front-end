@@ -8,7 +8,7 @@ export const LoadingContext = createContext({
   setLoading: (value: boolean) => {},
 });
 
-export const LoggedUserProvider = ({
+export const LoadingProvider = ({
   children,
 }: {
   children: React.ReactNode;

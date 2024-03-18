@@ -8,6 +8,7 @@ export interface User {
   phone?: number;
   role: "ADMIN" | "PROFESSOR" | "STUDENT";
   program?: string;
+  state?: "ACTIVE" | "INACTIVE" | "PENDING";
   active?: boolean;
 }
 

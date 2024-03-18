@@ -15,7 +15,17 @@ import {
   filterSchema,
   filterSelections,
 } from "@/app/(home)/users/list/filterFields";
-import { translateRole } from "@/actions/Translators";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { translateRole, translateState } from "@/actions/Translators";
+import { Button } from "@/components/ui/button";
 
 export default function UsersTablePage() {
   const [request, setRequest] = useState<ListRequest>({
@@ -27,18 +37,23 @@ export default function UsersTablePage() {
   });
   const [response, setResponse] = useState<ListResponse>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [pagination, setPagination] = useState("10");
   const { page, sort, direction, size } = request;
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      return await getUsers(request);
-    };
-    fetchData().then((response: any) => {
-      setResponse(response);
-      setIsLoading(false);
-    });
+    setIsLoading(true);
+    getUsers(request)
+      .then((response: any) => {
+        setResponse(response);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [request]);
+
+  useEffect(() => {
+    setRequest({ ...request, size: +pagination });
+  }, [pagination]);
 
   const handlePage = (pageNumber: number) => {
     setRequest({
@@ -64,9 +79,27 @@ export default function UsersTablePage() {
         <Filters
           schema={filterSchema}
           filterSelections={filterSelections}
-          handleFiltering={handleFiltering}
           defaultValues={defaultFilterValues}
+          handleFiltering={handleFiltering}
         />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button>Select pagination: {pagination}</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuLabel>Elements per page</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuRadioGroup
+              value={pagination}
+              onValueChange={setPagination}
+            >
+              <DropdownMenuRadioItem value="5">5</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="10">10</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="20">20</DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="grid grid-cols-5 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-5 md:px-6 2xl:px-7.5">
@@ -117,11 +150,12 @@ export default function UsersTablePage() {
                 <div className="col-span-1 flex items-center justify-end">
                   <p
                     className={cn("text-sm", {
-                      "text-green-600": user.active,
-                      "text-red-600": !user.active,
+                      "text-green-600": user.state === "ACTIVE",
+                      "text-red-600": user.state === "INACTIVE",
+                      "text-yellow-600": user.state === "PENDING",
                     })}
                   >
-                    {user.active ? "Active" : "Inactive"}
+                    {translateState(user.state as string)}
                   </p>
                 </div>
               </Link>

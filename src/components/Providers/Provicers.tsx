@@ -1,11 +1,15 @@
 import { SidebarProvider } from "../Contexts/SidebarContext";
-import { LoggedUserProvider } from "@/components/Contexts/LoggedUserContext";
 import React from "react";
+import { LoggedUserProvider } from "@/components/Contexts/LoggedUserContext";
+import {
+  LoadingContext,
+  LoadingProvider,
+} from "@/components/Contexts/LoadingContext";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <LoggedUserProvider>
+    <LoadingProvider>
       <SidebarProvider>{children}</SidebarProvider>
-    </LoggedUserProvider>
+    </LoadingProvider>
   );
 };

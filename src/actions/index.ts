@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { validateUser } from "@/services/user";
 import { SignJWT, jwtVerify } from "jose";
-import { Session } from "@/types/user";
+import { Session, User } from "@/types/user";
 
 // export async function encrypt(payload: any) {
 //   return await new SignJWT(payload)
@@ -36,7 +36,7 @@ export const login = async ({
 
   if (response.user) {
     // Save the session in a cookie
-    cookies().set("session", response.session, {
+    cookies().set("session", JSON.stringify(response), {
       // expires,
       httpOnly: true,
     });
@@ -69,7 +69,12 @@ export async function updateSession(request: NextRequest) {
 
 export const getSessionToken = async (): Promise<string | undefined> => {
   const cookiesStore = cookies();
-  return cookiesStore.get("session")?.value;
+  return JSON.parse(cookiesStore.get("session")?.value as string)?.session;
+};
+
+export const getLoggedUser = async (): Promise<User> => {
+  const cookiesStore = cookies();
+  return JSON.parse(cookiesStore.get("session")?.value as string)?.user;
 };
 
 export async function navigate(route: string) {

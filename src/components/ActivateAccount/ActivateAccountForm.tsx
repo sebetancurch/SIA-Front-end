@@ -1,6 +1,6 @@
 "use client";
-import React, { useContext } from "react";
-import { login, navigate } from "@/actions";
+import React from "react";
+import { navigate } from "@/actions";
 import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
@@ -12,8 +12,6 @@ import ReactLoading from "react-loading";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useColorMode from "@/hooks/useColorMode";
-import { LoggedUserContext } from "@/components/Contexts/LoggedUserContext";
-import { Session } from "@/types/user";
 import { toast } from "@/components/ui/use-toast";
 import {
   Form,
@@ -27,8 +25,12 @@ import { activateUser } from "@/services/user";
 import { Button } from "@/components/ui/button";
 
 const schema = z.object({
-  password: z.string().min(8),
-  confirmPassword: z.string().min(8),
+  password: z.string().trim().min(8, {
+    message: "At least 8 characters",
+  }),
+  confirmPassword: z.string().trim().min(8, {
+    message: "At least 8 characters",
+  }),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -38,6 +40,10 @@ const ActivateAccountForm = ({ token }: { token: string }) => {
 
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
   });
 
   const {

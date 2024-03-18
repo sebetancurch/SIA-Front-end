@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/popover";
 import { User } from "@/types/user";
 import { TiDelete } from "react-icons/ti";
+import { log } from "node:util";
 
 export interface FilterObject {
   label: string;
@@ -62,7 +63,7 @@ const Filters = ({
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues,
+    defaultValues,
   });
 
   const { control } = form;
@@ -97,7 +98,7 @@ const Filters = ({
     ];
     setFilters(newList);
     handleFiltering(newList);
-    console.log(form.getValues("filter"));
+    form.reset();
   }
 
   return (
@@ -117,10 +118,7 @@ const Filters = ({
                     <FormLabel className="mb-2.5 block font-medium text-black dark:text-white">
                       Filter by
                     </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={""}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select the filter" />
@@ -187,7 +185,13 @@ const Filters = ({
                         </FormLabel>
                         <Select onValueChange={field.onChange}>
                           <FormControl>
-                            <SelectTrigger className="w-full">
+                            <SelectTrigger
+                              className="w-full"
+                              disabled={
+                                (selectedFilter?.selectValues
+                                  ?.length as number) > 0
+                              }
+                            >
                               <SelectValue placeholder="Select the filter" />
                             </SelectTrigger>
                           </FormControl>
