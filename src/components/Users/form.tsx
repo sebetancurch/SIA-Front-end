@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { EmailIcon, ProfileIcon } from "@/components/SvgIcons/SvgIcons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { CalendarIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { z } from "zod";
+import { isDirty, z } from "zod";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
@@ -44,7 +44,7 @@ const formSchema = z.object({
   lastName: z.string().trim().min(1, {
     message: "A last name is required.",
   }),
-  phone: z.number().min(1, {
+  phone: z.coerce.number().min(1, {
     message: "Write a phone number",
   }),
   email: z.string().trim().email({
@@ -70,6 +70,8 @@ const formSchema = z.object({
 const UserForm = ({ user }: { user?: User }) => {
   const [isEdition, setIsEdition] = useState(!user);
 
+  const isFirstRender = useRef(true);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -79,19 +81,15 @@ const UserForm = ({ user }: { user?: User }) => {
     },
   });
 
-  const { control } = form;
+  if (user && isFirstRender.current) {
+    form.reset({
+      ...user,
+      birthday: new Date(user.birthday),
+    });
+    isFirstRender.current = false;
+  }
 
   // const roleWatcher = useWatch({ control, name: "role" });
-
-  useEffect(() => {
-    if (user) {
-      form.reset({
-        ...user,
-        birthday: new Date(user.birthday),
-      });
-      form.setValue("gender", user.gender);
-    }
-  }, []);
 
   // useEffect(() => {
   //   form.setValue("program", "");
@@ -214,8 +212,7 @@ const UserForm = ({ user }: { user?: User }) => {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          // type="text"
-                          inputMode="numeric"
+                          type="number"
                           placeholder="Phone number"
                           {...field}
                         />
@@ -256,6 +253,7 @@ const UserForm = ({ user }: { user?: User }) => {
                       </FormLabel>
                       <Select
                         onValueChange={field.onChange}
+                        value={field.value}
                         defaultValue={field.value}
                       >
                         <FormControl>

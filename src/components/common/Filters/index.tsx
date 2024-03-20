@@ -1,7 +1,6 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { ProfileIcon } from "@/components/SvgIcons/SvgIcons";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { z } from "zod";
+import { z, ZodTypeAny } from "zod";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
@@ -53,16 +52,26 @@ const Filters = ({
   defaultValues,
   handleFiltering,
 }: {
-  schema: z.ZodObject<any>;
+  schema: z.ZodTypeAny;
   filterSelections: FilterObject[];
   defaultValues: any;
   handleFiltering(filters: SentFilterObject[]): void;
 }) => {
+  const zodSchema = schema.superRefine((val, ctx) => {
+    if (val[val.filter] === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [val.filter],
+        message: "Field is required",
+      });
+    }
+  });
+
   const [filters, setFilters] = useState<SentFilterObject[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<FilterObject>();
 
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const form = useForm<z.infer<typeof zodSchema>>({
+    resolver: zodResolver(zodSchema),
     defaultValues,
   });
 
@@ -91,7 +100,7 @@ const Filters = ({
     setSelectedFilter(undefined);
   }
 
-  function onSubmit(data: z.infer<typeof schema>) {
+  function onSubmit(data: z.infer<typeof zodSchema>) {
     const newList = [
       ...filters,
       { attribute: data.filter, value: data[data.filter] },
@@ -118,7 +127,11 @@ const Filters = ({
                     <FormLabel className="mb-2.5 block font-medium text-black dark:text-white">
                       Filter by
                     </FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={""}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select the filter" />
@@ -183,15 +196,12 @@ const Filters = ({
                         <FormLabel className="mb-2.5 block font-medium text-black dark:text-white">
                           {selectedFilter?.label}
                         </FormLabel>
-                        <Select onValueChange={field.onChange}>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
                           <FormControl>
-                            <SelectTrigger
-                              className="w-full"
-                              disabled={
-                                (selectedFilter?.selectValues
-                                  ?.length as number) > 0
-                              }
-                            >
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select the filter" />
                             </SelectTrigger>
                           </FormControl>
@@ -213,6 +223,9 @@ const Filters = ({
               ) : (
                 <></>
               )}
+              <div className="font-medium text-red">
+                {form.formState.errors.root?.message}
+              </div>
               <div className="flex justify-end">
                 <Button
                   className="flex justify-center rounded bg-primary px-6 py-3 font-medium text-gray hover:bg-opacity-90"

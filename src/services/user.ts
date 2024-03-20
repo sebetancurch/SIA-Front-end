@@ -4,6 +4,7 @@ import { azureUrls } from "./urls";
 import { Session, User } from "@/types/user";
 import { ListRequest } from "@/types/list-request";
 import { getSessionToken } from "@/actions";
+import { compileNonPath } from "next/dist/shared/lib/router/utils/prepare-destination";
 
 export async function validateUser(user: {
   email: string;
@@ -71,7 +72,7 @@ export async function createUser(user: User): Promise<any> {
 export async function updateUser(user: User, id: number): Promise<any> {
   try {
     const accessToken = await getSessionToken();
-    const response = await fetch(azureUrls.users.create + "/" + id, {
+    const response = await fetch(azureUrls.users.update + "/" + id, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
