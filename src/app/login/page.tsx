@@ -21,7 +21,7 @@ const SignIn: React.FC = () => {
                   />
                   <Image
                     className="dark:hidden"
-                    src={"/images/logo/SIA-logo.svg"}
+                    src={"/images/logo/SIA-logo-dark.svg"}
                     alt="Logo"
                     width={200}
                     height={200}

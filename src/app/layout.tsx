@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true} className="dark">
-        <div className="dark:bg-boxdark-2 dark:text-bodydark">
+        <div className="h-screen overflow-auto dark:bg-boxdark-2 dark:text-bodydark">
           <Providers>{children}</Providers>
         </div>
         <Toaster />

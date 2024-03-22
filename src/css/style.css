@@ -8,6 +8,12 @@
     body {
         @apply relative z-1 bg-whiten font-satoshi text-base font-normal text-body;
     }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 }
 
 @layer components {
@@ -241,4 +247,8 @@ input[type="search"]::-webkit-search-cancel-button {
 
 [x-cloak] {
     display: none !important;
+}
+
+.rdp-vhidden {
+    @apply hidden;
 }

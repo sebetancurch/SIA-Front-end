@@ -156,12 +156,20 @@ const UserForm = ({ user }: { user?: User }) => {
           <FaEdit size={20} />
         </Button>
       </div>
-      <div className="flex justify-between"></div>
-      <div className="p-7">
+      <div
+        className={cn("pt-7", {
+          "p-7": user,
+        })}
+      >
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <fieldset disabled={!isEdition}>
-              <div className="grid grid-cols-2 gap-5.5">
+              <div
+                className={cn("gap-5.5 overflow-auto", {
+                  "grid grid-cols-2": user,
+                  "flex flex-col": !user,
+                })}
+              >
                 <FormField
                   control={form.control}
                   name="firstName"

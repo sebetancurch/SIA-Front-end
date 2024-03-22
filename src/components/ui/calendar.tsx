@@ -79,7 +79,7 @@ function Calendar({
                 handleChange(value);
               }}
             >
-              <SelectTrigger className="h-2 pr-1.5 focus:ring-0">
+              <SelectTrigger className="h-2">
                 <SelectValue>{selected?.props?.children}</SelectValue>
               </SelectTrigger>
               <SelectContent position="popper">

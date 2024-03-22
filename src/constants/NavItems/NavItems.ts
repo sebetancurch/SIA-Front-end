@@ -62,7 +62,7 @@ export const navItems: NavItems[] = [
     name: "Settings",
     isGroup: false,
     category: "MENU",
-    link: "/settings",
+    link: "/settings-page",
     icon: SettingsIcon,
   },
   {

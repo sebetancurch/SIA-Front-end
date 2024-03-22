@@ -8,7 +8,6 @@ import Link from "next/link";
 import { EmptyList } from "@/components/common/Empty";
 import { getUsers } from "@/services/user";
 import { PaginationElement } from "@/components/common/Pagination";
-import CreationDialog from "@/components/Users/creation";
 import Filters, { SentFilterObject } from "@/components/common/Filters";
 import {
   defaultFilterValues,
@@ -26,6 +25,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { translateRole, translateState } from "@/actions/Translators";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { FaPlus } from "react-icons/fa";
+import UserForm from "@/components/Users/form";
 
 export default function UsersTablePage() {
   const [request, setRequest] = useState<ListRequest>({
@@ -72,7 +81,24 @@ export default function UsersTablePage() {
         <h4 className="text-xl font-semibold text-black dark:text-white">
           Users
         </h4>
-        <CreationDialog />
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button>
+              <FaPlus className="mr-2 h-4 w-4" />
+              Create
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Create User</SheetTitle>
+              <SheetDescription>
+                Be aware that the email is unique and is not registered yet in
+                the app.
+              </SheetDescription>
+            </SheetHeader>
+            <UserForm />
+          </SheetContent>
+        </Sheet>
       </div>
 
       <div className="flex justify-between px-4 pb-6 md:px-6 xl:px-7.5">
@@ -102,17 +128,17 @@ export default function UsersTablePage() {
         </DropdownMenu>
       </div>
 
-      <div className="grid grid-cols-5 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-5 md:px-6 2xl:px-7.5">
+      <div className="grid grid-cols-4 border-t border-stroke px-4 py-4.5 dark:border-strokedark md:px-6 lg:grid-cols-5 2xl:px-7.5">
         <div className="col-span-1 flex items-center">
           <p className="font-medium">Name</p>
         </div>
-        <div className="col-span-1 flex items-center">
+        <div className="col-span-2 flex items-center justify-center lg:col-span-1 lg:justify-start">
           <p className="font-medium">Role</p>
         </div>
-        <div className="col-span-1 flex items-center">
+        <div className="col-span-1 hidden items-center lg:flex">
           <p className="font-medium">email</p>
         </div>
-        <div className="col-span-1 flex items-center">
+        <div className="col-span-1 hidden items-center lg:flex">
           <p className="font-medium">Program</p>
         </div>
         <div className="col-span-1 flex items-center justify-end">
@@ -125,7 +151,7 @@ export default function UsersTablePage() {
           <>
             {response?.content.map((user) => (
               <Link
-                className="hover:bg- grid grid-cols-5 border-t border-stroke px-4 py-4.5 dark:border-strokedark dark:hover:bg-meta-4 sm:grid-cols-5 md:px-6 2xl:px-7.5"
+                className="grid grid-cols-4 border-t border-stroke px-4 py-4.5 hover:bg-meta-2 dark:border-strokedark dark:hover:bg-meta-4 md:px-6 lg:grid-cols-5 2xl:px-7.5"
                 key={user.id}
                 href={"/users/details/" + user.id}
               >
@@ -134,17 +160,17 @@ export default function UsersTablePage() {
                     {user.firstName + " " + user.lastName}
                   </p>
                 </div>
-                <div className="col-span-1 flex items-center">
+                <div className="col-span-2 flex items-center justify-center lg:col-span-1 lg:justify-start">
                   <p className="text-sm text-black dark:text-white">
                     {translateRole(user.role)}
                   </p>
                 </div>
-                <div className="col-span-1 flex items-center">
+                <div className="col-span-1 hidden items-center lg:flex">
                   <p className="text-sm text-black dark:text-white">
                     {user.email}
                   </p>
                 </div>
-                <div className="col-span-1 flex items-center">
+                <div className="col-span-1 hidden items-center lg:flex">
                   {user.program}
                 </div>
                 <div className="col-span-1 flex items-center justify-end">

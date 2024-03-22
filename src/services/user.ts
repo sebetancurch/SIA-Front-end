@@ -52,6 +52,22 @@ export async function getUsers(request: ListRequest): Promise<any> {
   }
 }
 
+export async function getUserByToken(token: string): Promise<any> {
+  try {
+    const accessToken = await getSessionToken();
+    const response = await fetch(azureUrls.users.list, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken as string,
+      },
+    });
+    return await response.json();
+  } catch (e) {
+    throw new Error("An unexpected error has occurred");
+  }
+}
+
 export async function createUser(user: User): Promise<any> {
   try {
     const accessToken = await getSessionToken();
