@@ -254,6 +254,7 @@ const Filters = ({
                 {filter.attribute}: {filter.value}
               </span>
               <Button
+                variant="outline"
                 className="h-5 w-5 rounded-full p-0"
                 onClick={() => {
                   deleteFilter(filter.attribute);

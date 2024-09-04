@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { navigate } from "@/actions";
+import { navigate } from "@/actions/login-actions";
 import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {

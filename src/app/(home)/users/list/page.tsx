@@ -23,7 +23,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { translateRole, translateState } from "@/actions/Translators";
+import { translateRole, translateState } from "@/actions/translators";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -34,7 +34,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { FaPlus } from "react-icons/fa";
-import UserForm from "@/components/Users/form";
+import UserForm from "@/app/(home)/users/details/[id]/form";
+import { User } from "@/types/user";
+import { toast } from "@/components/ui/use-toast";
+import { Response } from "@/types/response";
 
 export default function UsersTablePage() {
   const [request, setRequest] = useState<ListRequest>({
@@ -44,21 +47,37 @@ export default function UsersTablePage() {
     sort: "id",
     filters: [],
   });
-  const [response, setResponse] = useState<ListResponse>();
+  const [response, setResponse] = useState<ListResponse<User>>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState("10");
+  const [refresh, setRefresh] = useState<boolean>(false);
   const { page, sort, direction, size } = request;
 
   useEffect(() => {
     setIsLoading(true);
     getUsers(request)
-      .then((response: any) => {
-        setResponse(response);
+      .then((response: Response<ListResponse<User>>) => {
+        if (response.success) {
+          setResponse(response.content as ListResponse<User>);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "There was an error with the request",
+            description: response.message,
+          });
+        }
+      })
+      .catch(() => {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        });
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, [request]);
+  }, [request, refresh]);
 
   useEffect(() => {
     setRequest({ ...request, size: +pagination });
@@ -88,7 +107,7 @@ export default function UsersTablePage() {
               Create
             </Button>
           </SheetTrigger>
-          <SheetContent>
+          <SheetContent className="overflow-auto">
             <SheetHeader>
               <SheetTitle>Create User</SheetTitle>
               <SheetDescription>
@@ -96,7 +115,7 @@ export default function UsersTablePage() {
                 the app.
               </SheetDescription>
             </SheetHeader>
-            <UserForm />
+            <UserForm refresh={refresh} setRefresh={setRefresh} />
           </SheetContent>
         </Sheet>
       </div>

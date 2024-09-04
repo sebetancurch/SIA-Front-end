@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { login, navigate } from "@/actions";
+import { login, navigate } from "@/actions/login-actions";
 import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { EmailIcon, PasswordIcon } from "@/components/SvgIcons/SvgIcons";
@@ -17,6 +17,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Navigation } from "@/types/navigation";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const schema = z.object({
   email: z.string().trim().email({
@@ -49,20 +51,12 @@ const LogInForm = () => {
   } = form;
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    try {
-      const loginResponse = await login(data);
-      if (loginResponse.session) {
-        await navigate("/");
-      } else {
-        setError("root", {
-          message: loginResponse.message,
-        });
-      }
-    } catch (e) {
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
+    const loginResponse = await login(data);
+    if (loginResponse.success) {
+      await navigate("/");
+    } else {
+      setError("root", {
+        message: loginResponse.message,
       });
     }
   };

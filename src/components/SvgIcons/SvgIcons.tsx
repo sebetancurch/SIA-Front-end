@@ -1,3 +1,6 @@
+import { FaUniversity } from "react-icons/fa";
+import { SiBookstack } from "react-icons/si";
+
 export const EmailIcon = (
   <svg
     className="fill-current"
@@ -811,3 +814,6 @@ export const EmptyListIllustration = (props: any) => (
     </g>
   </svg>
 );
+
+export const FaUniversityIcon = <FaUniversity />;
+export const SiBookstackIcon = <SiBookstack />;

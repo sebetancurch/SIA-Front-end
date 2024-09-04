@@ -13,8 +13,8 @@ const Header = () => {
   const { sidebarOpen, setSidebarOpen } = useContext(SidebarContext);
   return (
     <header className="sticky top-0 z-40 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
-      <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
-        <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
+      <div className="flex flex-grow items-center justify-between px-4 py-2 shadow-2 md:px-6 2xl:px-11">
+        <div className="flex items-center gap-2 sm:gap-4">
           {/* <!-- Hamburger Toggle BTN --> */}
           <button
             aria-controls="sidebar"
@@ -22,7 +22,7 @@ const Header = () => {
               e.stopPropagation();
               setSidebarOpen(!sidebarOpen);
             }}
-            className="z-99999 block rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
+            className="rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark"
           >
             <span className="relative block h-5.5 w-5.5 cursor-pointer">
               <span className="du-block absolute right-0 h-full w-full">
@@ -58,21 +58,26 @@ const Header = () => {
           </button>
           {/* <!-- Hamburger Toggle BTN --> */}
 
-          <Link className="block flex-shrink-0 lg:hidden" href="/">
-            <Image
-              className="hidden dark:block"
-              src={"/images/logo/SIA-logo.svg"}
-              alt="Logo"
-              width={40}
-              height={40}
-            />
-            <Image
-              className="dark:hidden"
-              src={"/images/logo/SIA-logo-dark.svg"}
-              alt="Logo"
-              width={40}
-              height={40}
-            />
+          <Link href="/">
+            <div className="flex items-center gap-4">
+              <Image
+                className="hidden dark:block"
+                src={"/images/logo/SIA-logo.svg"}
+                alt="Logo"
+                width={40}
+                height={40}
+              />
+              <Image
+                className="dark:hidden"
+                src={"/images/logo/SIA-logo-dark.svg"}
+                alt="Logo"
+                width={40}
+                height={40}
+              />
+              <h4 className="text-xl font-semibold text-black dark:text-white">
+                SIA
+              </h4>
+            </div>
           </Link>
         </div>
 
@@ -128,7 +133,7 @@ const Header = () => {
             <Link
               target="_blank"
               href="https://smartkey.xertica.com/cloudkey/a/unal.edu.co/user/login"
-              className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke bg-gray hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
+              className="relative inline-flex h-8.5 w-8.5 items-center justify-center whitespace-nowrap rounded-md bg-gray bg-transparent px-2 text-sm font-medium ring-offset-white transition-colors hover:bg-slate-100 hover:bg-transparent hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:bg-transparent dark:text-white dark:ring-offset-slate-950 dark:hover:bg-slate-800 dark:hover:bg-transparent dark:hover:text-slate-50 dark:focus-visible:ring-slate-300"
             >
               {EmailIcon}
             </Link>

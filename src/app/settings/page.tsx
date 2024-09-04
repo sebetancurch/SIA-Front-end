@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { ProfileForm } from "@/app/settings/profile-form";
 import { User } from "@/types/user";
-import { getSessionToken } from "@/actions";
+import { getSessionToken } from "@/actions/login-actions";
 
 const timeOut = async () => {
   return await new Promise((resolve) => setTimeout(resolve, 10000));

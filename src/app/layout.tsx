@@ -1,4 +1,3 @@
-import "jsvectormap/dist/css/jsvectormap.css";
 import "flatpickr/dist/flatpickr.min.css";
 import "@/css/satoshi.css";
 import "@/css/style.css";
@@ -26,9 +25,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body suppressHydrationWarning={true} className="dark">
-        <div className="h-screen overflow-auto dark:bg-boxdark-2 dark:text-bodydark">
+    <html className="dark" lang="en">
+      <body
+        suppressHydrationWarning={true}
+        className="min-h-screen dark:bg-boxdark-2 dark:text-bodydark"
+      >
+        <div className="min-h-screen">
           <Providers>{children}</Providers>
         </div>
         <Toaster />

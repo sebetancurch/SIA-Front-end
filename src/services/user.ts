@@ -1,122 +1,98 @@
 "use server";
 
 import { azureUrls } from "./urls";
-import { Session, User } from "@/types/user";
-import { ListRequest } from "@/types/list-request";
-import { getSessionToken } from "@/actions";
-import { compileNonPath } from "next/dist/shared/lib/router/utils/prepare-destination";
+import { User } from "@/types/user";
+import { ListRequest, ListResponse } from "@/types/list-request";
+import { getSessionToken } from "@/actions/login-actions";
+import { LoginResponse, Response } from "@/types/response";
+import axiosInstance from "@/lib/axios";
 
 export async function validateUser(user: {
   email: string;
   password: string;
-}): Promise<any> {
+}): Promise<Response<LoginResponse>> {
   try {
-    const encodedUser = new TextEncoder().encode(JSON.stringify(user));
-    const response = await fetch(azureUrls.users.login, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: encodedUser,
-    });
-
-    const loggedUser = await response.json();
-    if (loggedUser.success) {
-      const token = response.headers.get("Authorization");
-      return {
-        user: { ...loggedUser.user },
-        session: token,
-      };
-    } else {
-      return loggedUser;
-    }
+    const { data } = await axiosInstance.post(azureUrls.users.login, user);
+    return data;
   } catch (e) {
-    return "An unexpected error has occurred";
+    throw new Error(e instanceof Error ? e.message : "Unknown error");
   }
 }
 
-export async function getUsers(request: ListRequest): Promise<any> {
+export async function getUserDataByToken(): Promise<Response<LoginResponse>> {
   try {
     const accessToken = await getSessionToken();
-    const response = await fetch(azureUrls.users.list, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: accessToken as string,
-      },
-      body: JSON.stringify(request),
-    });
-    return await response.json();
+    const { data } = await axiosInstance.get(
+      azureUrls.users.getUserDataByToken + "?token=" + accessToken,
+    );
+    return data;
   } catch (e) {
-    throw new Error("An unexpected error has occurred");
+    throw new Error(e instanceof Error ? e.message : "Unknown error");
   }
 }
 
-export async function getUserByToken(token: string): Promise<any> {
+export async function getUsers(
+  request: ListRequest,
+): Promise<Response<ListResponse<User>>> {
   try {
-    const accessToken = await getSessionToken();
-    const response = await fetch(azureUrls.users.list, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: accessToken as string,
-      },
-    });
-    return await response.json();
+    const { data } = await axiosInstance.post(azureUrls.users.list, request);
+    return data;
   } catch (e) {
-    throw new Error("An unexpected error has occurred");
+    throw new Error(e instanceof Error ? e.message : "Unknown error");
   }
 }
 
-export async function createUser(user: User): Promise<any> {
+export async function getProfessorsForDean(
+  request: ListRequest,
+): Promise<Response<ListResponse<User>>> {
   try {
-    const accessToken = await getSessionToken();
-    const response = await fetch(azureUrls.users.create, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: accessToken as string,
-      },
-      body: JSON.stringify(user),
-    });
-    return await response.json();
+    const { data } = await axiosInstance.post(
+      azureUrls.users.deanList,
+      request,
+    );
+    return data;
   } catch (e) {
-    throw new Error("An unexpected error has occurred");
+    throw new Error(e instanceof Error ? e.message : "Unknown error");
   }
 }
 
-export async function updateUser(user: User, id: number): Promise<any> {
+export async function createUser(user: User): Promise<Response<User>> {
+  console.log(user);
   try {
-    const accessToken = await getSessionToken();
-    const response = await fetch(azureUrls.users.update + "/" + id, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: accessToken as string,
-      },
-      body: JSON.stringify(user),
-    });
-    return await response.json();
+    const { data } = await axiosInstance.post(azureUrls.users.create, user);
+    return data;
   } catch (e) {
-    throw new Error("An unexpected error has occurred");
+    console.error(e);
+    throw new Error(e instanceof Error ? e.message : "Unknown error");
+  }
+}
+
+export async function updateUser(
+  user: User,
+  id: number,
+): Promise<Response<User>> {
+  try {
+    const { data } = await axiosInstance.patch(
+      azureUrls.users.update + "/" + id,
+      user,
+    );
+    return data;
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : "Unknown error");
   }
 }
 
 export async function activateUser(
-  data: { password: string; confirmPassword: string },
+  passwordBody: { password: string; confirmPassword: string },
   token: string,
-): Promise<any> {
+): Promise<Response<void>> {
   try {
-    const response = await fetch(azureUrls.users.activate + "?token=" + token, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-      body: JSON.stringify(data),
-    });
-    return await response.json();
+    const { data } = await axiosInstance.patch(
+      azureUrls.users.activate + "?token=" + token,
+      passwordBody,
+    );
+    return data;
   } catch (e) {
-    throw new Error("An unexpected error has occurred");
+    throw new Error(e instanceof Error ? e.message : "Unknown error");
   }
 }

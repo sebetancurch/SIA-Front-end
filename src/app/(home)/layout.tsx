@@ -1,23 +1,34 @@
-import React from "react";
+"use client";
+import React, { useContext } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import { LoggedUserProvider } from "@/components/Contexts/LoggedUserContext";
+import { SidebarContext } from "@/components/Contexts/SidebarContext";
+import { cn } from "@/lib/utils";
+import SyncComponent from "@/components/common/SyncComponent";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const { sidebarOpen } = useContext(SidebarContext);
   return (
-    <LoggedUserProvider>
+    <>
+      <SyncComponent />
       {/* <!-- ===== Page Wrapper Start ===== --> */}
-      <div className="flex h-screen overflow-hidden">
+      <div className="relative flex flex-col">
+        {/* <!-- ===== Header Start ===== --> */}
+        <Header />
+        {/* <!-- ===== Header End ===== --> */}
         {/* <!-- ===== Sidebar Start ===== --> */}
         <Sidebar />
         {/* <!-- ===== Sidebar End ===== --> */}
 
         {/* <!-- ===== Content Area Start ===== --> */}
-        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-          {/* <!-- ===== Header Start ===== --> */}
-          <Header />
-          {/* <!-- ===== Header End ===== --> */}
-
+        <div
+          className={cn(
+            "flex-1 transform overflow-y-auto overflow-x-hidden duration-300 ease-linear lg:pl-0",
+            {
+              "lg:pl-52.5": sidebarOpen,
+            },
+          )}
+        >
           {/* <!-- ===== Main Content Start ===== --> */}
           <main>
             <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
@@ -29,6 +40,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* <!-- ===== Content Area End ===== --> */}
       </div>
       {/* <!-- ===== Page Wrapper End ===== --> */}
-    </LoggedUserProvider>
+    </>
   );
 }

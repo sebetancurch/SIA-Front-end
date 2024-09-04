@@ -1,5 +1,3 @@
-import { User } from "@/types/user";
-
 export interface ListRequest {
   page: number;
   size: number;
@@ -7,12 +5,12 @@ export interface ListRequest {
   direction: string;
   filters?: {
     attribute: string;
-    value: string;
+    value: string | number;
   }[];
 }
 
-export interface ListResponse {
-  content: User[];
+export interface ListResponse<T> {
+  content: T[];
   pageable: {
     pageNumber: number;
     pageSize: number;

@@ -1,13 +1,13 @@
-import UserForm from "@/components/Users/form";
+import UserForm from "@/app/(home)/users/details/[id]/form";
 import { getUsers } from "@/services/user";
-import { router } from "next/client";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { cookies } from "next/headers";
-import { getSessionToken } from "@/actions";
+import FacultyForm from "@/app/(home)/faculties/details/[id]/form";
+import { Faculty } from "@/types/faculty";
+import { User } from "@/types/user";
 
 const UserDetails = async (props: { params: { id: string } }) => {
   const { id } = props.params;
-  const user = await getUsers({
+
+  const userResponse = await getUsers({
     direction: "ASC",
     page: 0,
     size: 1,
@@ -15,12 +15,16 @@ const UserDetails = async (props: { params: { id: string } }) => {
     filters: [
       {
         attribute: "id",
-        value: id,
+        value: +id,
       },
     ],
   });
 
-  return <UserForm user={user?.content[0]} />;
+  if (!userResponse.success) {
+    throw new Error(userResponse.message);
+  }
+
+  return <UserForm user={userResponse.content?.content[0] as User} />;
 };
 
 export default UserDetails;

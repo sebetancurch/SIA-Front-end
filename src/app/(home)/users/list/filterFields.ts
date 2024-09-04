@@ -26,7 +26,7 @@ export const filterSelections: FilterObject[] = [
     type: "input",
   },
   {
-    name: "role",
+    name: "role.name",
     label: "Role",
     type: "select",
     selectValues: [

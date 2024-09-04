@@ -8,7 +8,7 @@ const useColorMode = () => {
 
   useEffect(() => {
     const className = "dark";
-    const bodyClass = window.document.body.classList;
+    const bodyClass = window.document.documentElement.classList;
 
     colorMode === "dark"
       ? bodyClass.add(className)

@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { updateSession } from "./actions";
+import { updateSession } from "./actions/login-actions";
 import { cookies } from "next/headers";
 
 export async function middleware(request: NextRequest) {
@@ -8,7 +8,8 @@ export async function middleware(request: NextRequest) {
   if (!excludedPaths.test(url.pathname)) {
     if (
       !request.nextUrl.pathname.endsWith("/login") &&
-      !request.nextUrl.pathname.includes("/activate-account")
+      !request.nextUrl.pathname.includes("/activate-account") &&
+      !request.nextUrl.pathname.includes("/open-course")
     ) {
       const cookiesStore = cookies();
       const accessToken = cookiesStore.get("session")?.value;

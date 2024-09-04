@@ -56,7 +56,6 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 // This can come from your database or API.
 const defaultValues: Partial<ProfileFormValues> = {
-  bio: "I own a computer.",
   urls: [{ value: "" }],
 };
 
@@ -159,6 +158,9 @@ export function ProfileForm({ user }: any) {
                     <div className="flex items-center">
                       <Input className="py-2" {...field} />
                       <Button
+                        className={cn({
+                          hidden: index == 0,
+                        })}
                         type="button"
                         variant="outline"
                         size="icon"

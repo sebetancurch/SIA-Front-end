@@ -1,5 +1,6 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Settings = () => {
   return (
@@ -217,12 +218,10 @@ const Settings = () => {
               <form action="#">
                 <div className="mb-4 flex items-center gap-3">
                   <div className="h-14 w-14 rounded-full">
-                    <Image
-                      src={"/images/user/user-03.png"}
-                      width={55}
-                      height={55}
-                      alt="User"
-                    />
+                    <Avatar>
+                      <AvatarImage src="userh.png" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
                   </div>
                   <div>
                     <span className="mb-1.5 text-black dark:text-white">

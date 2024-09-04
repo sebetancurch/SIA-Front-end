@@ -27,7 +27,7 @@ interface SettingsLayoutProps {
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
-    <div className="mx-auto max-w-screen-lg p-4 md:p-6 2xl:p-10">
+    <div className="mx-auto max-w-screen-lg md:p-6 lg:p-4 2xl:p-10">
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="space-y-6 p-10 pb-16 md:block">
           <div className="space-y-0.5">

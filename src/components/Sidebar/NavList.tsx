@@ -1,10 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NavItems, navItems } from "@/constants/NavItems/NavItems";
+import { Navigation } from "@/types/navigation";
+import useStore from "@/store/LoggedUserStore";
+import { Skeleton } from "@/components/ui/skeleton";
 
-function groupByCategory(objects: NavItems[]): { [key: string]: NavItems[] } {
+function groupByCategory(objects: Navigation[]): {
+  [key: string]: Navigation[];
+} {
   return objects.reduce(
     (result, obj) => {
       const category = obj.category;
@@ -12,19 +16,23 @@ function groupByCategory(objects: NavItems[]): { [key: string]: NavItems[] } {
       result[category].push(obj);
       return result;
     },
-    {} as { [key: string]: NavItems[] },
+    {} as { [key: string]: Navigation[] },
   );
 }
 
 export const NavList = () => {
-  const navList: NavItems[] = navItems;
+  const navigationData = useStore((state) => state.navigationData);
+  const fetchNavigationData = useStore((state) => state.fetchUserData);
+
   const pathname = usePathname();
 
-  let storedSidebarExpanded = "true";
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
-  const [sidebarExpanded, setSidebarExpanded] = useState(
-    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true",
-  );
+  useEffect(() => {
+    if (!navigationData) {
+      fetchNavigationData();
+    }
+  }, [navigationData, fetchNavigationData]);
 
   useEffect(() => {
     localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
@@ -35,7 +43,24 @@ export const NavList = () => {
     }
   }, [sidebarExpanded]);
 
-  const groupCategory = groupByCategory(navList);
+  if (!navigationData) {
+    return (
+      <ul className="h-full">
+        <Skeleton className="my-4 h-7 w-30" />
+        <Skeleton className="my-4 h-7 w-40" />
+        <Skeleton className="my-4 h-7 w-40" />
+        <Skeleton className="my-4 h-7 w-40" />
+        <Skeleton className="my-4 h-7 w-40" />
+        <Skeleton className="my-4 h-7 w-30" />
+        <Skeleton className="my-4 h-7 w-40" />
+        <Skeleton className="my-4 h-7 w-40" />
+        <Skeleton className="my-4 h-7 w-40" />
+        <Skeleton className="my-4 h-7 w-40" />
+      </ul>
+    );
+  }
+
+  const groupCategory = groupByCategory(navigationData);
   const elements = [];
 
   for (const category in groupCategory) {
@@ -49,8 +74,8 @@ export const NavList = () => {
             {groupCategory[category].map((item) => {
               return item.isGroup ? (
                 <SidebarLinkGroup
-                  activeCondition={pathname.includes(item.id)}
-                  key={item.id}
+                  activeCondition={pathname.includes(item.link)}
+                  key={item.link}
                 >
                   {(handleClick, open) => {
                     return (
@@ -58,7 +83,7 @@ export const NavList = () => {
                         <Link
                           href="#"
                           className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:text-primary dark:hover:bg-meta-4 dark:hover:text-white ${
-                            pathname.includes(item.id) &&
+                            pathname.includes(item.link) &&
                             "text-primary dark:bg-meta-4 dark:text-white"
                           }`}
                           onClick={(e) => {
@@ -115,13 +140,12 @@ export const NavList = () => {
                   }}
                 </SidebarLinkGroup>
               ) : (
-                <li key={item.id}>
+                <li key={item.link}>
                   <Link
                     href={item.link || "/"}
                     className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:text-primary dark:hover:bg-meta-4 dark:hover:text-white ${
                       item.link &&
-                      ((pathname === "/" && item.link === "/") ||
-                        pathname.includes(item.id)) &&
+                      pathname === item.link &&
                       "text-primary dark:bg-meta-4 dark:text-white"
                     }`}
                   >
