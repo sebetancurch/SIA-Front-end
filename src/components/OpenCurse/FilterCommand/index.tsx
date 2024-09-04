@@ -16,7 +16,10 @@ export const FilterCommand = ({ items }: { items: string[] }) => {
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup>
           {items?.map((item) => (
-            <CommandItem className="flex justify-between aria-selected:bg-white dark:aria-selected:bg-boxdark">
+            <CommandItem
+              key={item}
+              className="flex justify-between aria-selected:bg-white dark:aria-selected:bg-boxdark"
+            >
               <span>{item}</span>
               <Checkbox />
             </CommandItem>

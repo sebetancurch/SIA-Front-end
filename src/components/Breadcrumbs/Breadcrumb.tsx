@@ -15,7 +15,7 @@ const Breadcrumb = ({ previousPages, pageName }: BreadcrumbProps) => {
       <nav>
         <ol className="flex items-center gap-2">
           {previousPages.map((page) => (
-            <li>
+            <li key={page.link}>
               <Link className="font-medium" href={`/${page.link}`}>
                 {page.name} /
               </Link>

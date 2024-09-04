@@ -10,7 +10,6 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SearchBar } from "@/app/open-course/search-bar";
-import { getCourses } from "@/services/open-course";
 import { Subject } from "@/types/subject";
 
 export const metadata: Metadata = {
@@ -26,7 +25,7 @@ const coursesExamples: Subject[] = [
     professorId: 5,
     courseId: 4,
     academicLevel: "Undergraduate",
-    isActive: true,
+    active: true,
   },
   {
     id: 2,
@@ -35,7 +34,7 @@ const coursesExamples: Subject[] = [
     professorId: 5,
     courseId: 4,
     academicLevel: "Undergraduate",
-    isActive: true,
+    active: true,
   },
   {
     id: 3,
@@ -44,7 +43,7 @@ const coursesExamples: Subject[] = [
     professorId: 5,
     courseId: 4,
     academicLevel: "Undergraduate",
-    isActive: true,
+    active: true,
   },
 ];
 
@@ -70,9 +69,9 @@ export default async function Home() {
       <div className="flex items-center gap-4">
         <SearchBar subjects={coursesExamples} />
         <span>or</span>
-        <Link href={"/open-course/courses-list"}>
-          <Button>Explore</Button>
-        </Link>
+        {/*<Link href={"/open-course/courses-list"}>*/}
+        {/*  <Button>Explore</Button>*/}
+        {/*</Link>*/}
       </div>
       <div>
         <h1 className="text-xl">Discover courses</h1>

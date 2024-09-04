@@ -78,7 +78,7 @@ export function FetchCombobox({
             },
           ],
         });
-        setOptions(data.content);
+        setOptions(data.content?.content as any[]);
       } catch (error) {
         console.error("Error fetching options:", error);
       } finally {

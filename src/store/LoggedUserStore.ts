@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, PersistStorage, StorageValue } from "zustand/middleware";
 import { Navigation } from "@/types/navigation";
 import { User } from "@/types/user";
 import { getUserDataByToken } from "@/services/user";
@@ -11,6 +11,19 @@ interface AuthState {
   setUserData: (data: User) => void;
   fetchUserData: () => Promise<void>;
 }
+
+const customStorage: PersistStorage<AuthState> = {
+  getItem: (key: string) => {
+    const value = window.localStorage.getItem(key);
+    return value ? (JSON.parse(value) as StorageValue<AuthState>) : null;
+  },
+  setItem: (key: string, value: StorageValue<AuthState>) => {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  },
+  removeItem: (key: string) => {
+    window.localStorage.removeItem(key);
+  },
+};
 
 const useStore = create<AuthState>()(
   persist(
@@ -35,7 +48,7 @@ const useStore = create<AuthState>()(
     }),
     {
       name: "auth-storage", // changed to be more specific
-      storage: typeof window !== "undefined" ? window.localStorage : undefined,
+      storage: typeof window !== "undefined" ? customStorage : undefined,
     },
   ),
 );
