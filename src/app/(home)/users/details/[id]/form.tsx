@@ -97,8 +97,10 @@ const UserForm = ({
   });
 
   if (user && isFirstRender.current) {
+    console.log(user);
     form.reset({
       ...user,
+
       birthday: new Date(user.birthday),
     });
     isFirstRender.current = false;
@@ -175,7 +177,7 @@ const UserForm = ({
             <fieldset disabled={!isEdition}>
               <div
                 className={cn("gap-5.5", {
-                  "grid grid-cols-2": user,
+                  "grid grid-cols-2 p-5": user,
                   "flex flex-col": !user,
                 })}
               >
@@ -263,6 +265,7 @@ const UserForm = ({
                 <FormField
                   control={form.control}
                   name="role"
+                  disabled
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel className="mb-2.5 block font-medium text-black dark:text-white">

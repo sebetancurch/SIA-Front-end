@@ -5,7 +5,6 @@ import Loader from "@/components/common/Loader";
 import { ListRequest, ListResponse } from "@/types/list-request";
 import { cn } from "@/lib/utils";
 import { EmptyList } from "@/components/common/Empty";
-import { getProfessorsForDean, getUsers } from "@/services/user";
 import { PaginationElement } from "@/components/common/Pagination";
 import Filters, { SentFilterObject } from "@/components/common/Filters";
 import {
@@ -25,7 +24,7 @@ import {
   defaultFilterValues,
   filterSchema,
   filterSelections,
-} from "@/components/Dialogs/DeanListSelection/filterFields";
+} from "@/components/Dialogs/FacultyListSelection/filterFields";
 import { Faculty } from "@/types/faculty";
 import { getFaculties } from "@/services/faculty";
 

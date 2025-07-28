@@ -41,7 +41,7 @@ export function FacultyListDialog() {
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel className="mb-2.5 block font-medium text-black dark:text-white">
-            Dean
+            Faculty
           </FormLabel>
           <Dialog>
             <DialogTrigger asChild>

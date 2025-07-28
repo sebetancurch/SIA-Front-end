@@ -7,6 +7,8 @@ export const azureUrls = {
     list: "/api/v1/users/listPaginatedUsers",
     deanList: "/api/v1/users/listPaginatedUsersAllowedForDean",
     activate: "/api/v1/users/activate",
+    refreshToken: "/api/v1/users/refreshToken",
+    logout: "/api/v1/users/logout",
   },
   faculties: {
     update: "/api/v1/faculty",

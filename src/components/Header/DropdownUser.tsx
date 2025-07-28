@@ -1,7 +1,6 @@
 "use client";
 import { useEffect } from "react";
 import Link from "next/link";
-import { logout } from "@/actions/login-actions";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,15 +8,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import useStore from "@/store/LoggedUserStore";
+import useAuthStore from "@/store/LoggedUserStore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { logout } from "@/services/user";
 
 const DropdownUser = () => {
-  const user = useStore((state) => state.userData);
-  const fetchUserData = useStore((state) => state.fetchUserData);
+  const user = useAuthStore((state) => state.userData);
+  const fetchUserData = useAuthStore((state) => state.fetchUserData);
 
   useEffect(() => {
-    if (!user) {
+    if (user === null) {
       fetchUserData();
     }
   }, [user, fetchUserData]);
@@ -128,8 +128,9 @@ const DropdownUser = () => {
           <button
             className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             onClick={() => {
-              window.localStorage.clear();
-              logout();
+              logout().then(() => {
+                useAuthStore.getState().clearAuth();
+              });
             }}
           >
             <svg

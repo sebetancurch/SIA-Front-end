@@ -3,7 +3,7 @@ import SidebarLinkGroup from "./SidebarLinkGroup";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Navigation } from "@/types/navigation";
-import useStore from "@/store/LoggedUserStore";
+import useAuthStore from "@/store/LoggedUserStore";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function groupByCategory(objects: Navigation[]): {
@@ -21,15 +21,15 @@ function groupByCategory(objects: Navigation[]): {
 }
 
 export const NavList = () => {
-  const navigationData = useStore((state) => state.navigationData);
-  const fetchNavigationData = useStore((state) => state.fetchUserData);
+  const navigationData = useAuthStore((state) => state.navigationData);
+  const fetchNavigationData = useAuthStore((state) => state.fetchUserData);
 
   const pathname = usePathname();
 
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
   useEffect(() => {
-    if (!navigationData) {
+    if (navigationData === null) {
       fetchNavigationData();
     }
   }, [navigationData, fetchNavigationData]);

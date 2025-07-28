@@ -1,6 +1,6 @@
 "use client";
+
 import React from "react";
-import { login, navigate } from "@/actions/login-actions";
 import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { EmailIcon, PasswordIcon } from "@/components/SvgIcons/SvgIcons";
@@ -8,7 +8,6 @@ import ReactLoading from "react-loading";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useColorMode from "@/hooks/useColorMode";
-import { toast } from "@/components/ui/use-toast";
 import {
   Form,
   FormControl,
@@ -17,8 +16,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import useAuthStore from "@/store/LoggedUserStore";
+import { login } from "@/services/user";
+import { User } from "@/types/user";
 import { Navigation } from "@/types/navigation";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import { useRouter } from "next/navigation";
+import { toast } from "../ui/use-toast";
 
 const schema = z.object({
   email: z.string().trim().email({
@@ -33,6 +36,8 @@ type FormFields = z.infer<typeof schema>;
 
 const LogInForm = () => {
   const [colorMode] = useColorMode();
+  const { setLogin } = useAuthStore();
+  const router = useRouter();
 
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
@@ -51,12 +56,25 @@ const LogInForm = () => {
   } = form;
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    const loginResponse = await login(data);
-    if (loginResponse.success) {
-      await navigate("/");
-    } else {
-      setError("root", {
-        message: loginResponse.message,
+    try {
+      const loginResponse = await login(data);
+      if (loginResponse.success) {
+        setLogin(
+          loginResponse.content?.user as User,
+          loginResponse.content?.navigation as Navigation[],
+          // loginResponse.content?.accessToken as string,
+        );
+        router.push("/");
+      } else {
+        setError("root", {
+          message: loginResponse.message,
+        });
+      }
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
       });
     }
   };

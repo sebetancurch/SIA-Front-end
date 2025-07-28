@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { ProfileIcon } from "@/components/SvgIcons/SvgIcons";
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, use, useRef, useState } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { FaEdit } from "react-icons/fa";
@@ -30,20 +30,25 @@ import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import { Course } from "@/types/course";
 import { createCourse, updateCourse } from "@/services/course";
 import { FacultyListDialog } from "@/components/Dialogs/FacultyListSelection";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
-  name: z.string().trim().min(1, {
-    message: "A name is required.",
-  }),
-  description: z.string().trim().min(1, {
-    message: "A dean is required.",
-  }),
-  dean: z.string().trim().min(1, {
-    message: "A dean is required.",
-  }),
-  code: z.string().min(6, {
-    message: "Your one-time password must be 6 characters.",
-  }),
+  name: z.string().trim(),
+  // .min(1, {
+  //   message: "A name is required.",
+  // }),
+  description: z.string().trim(),
+  // .min(1, {
+  //   message: "A description is required.",
+  // }),
+  faculty: z.string().trim(),
+  // .min(1, {
+  //   message: "A faculty is required.",
+  // }),
+  code: z.string(),
+  // .min(6, {
+  //   message: "The course code must be 6 characters.",
+  // }),
 });
 
 const CourseForm = ({
@@ -68,7 +73,7 @@ const CourseForm = ({
   });
 
   if (course && isFirstRender.current) {
-    form.reset({ ...course, dean: (course.faculty as number).toString() });
+    form.reset({ ...course, faculty: (course.faculty as number).toString() });
     isFirstRender.current = false;
   }
 
@@ -82,11 +87,11 @@ const CourseForm = ({
       if (!course) {
         response = await createCourse({
           ...data,
-          faculty: Number(data.dean),
+          faculty: Number(data.faculty),
         });
       } else {
         response = await updateCourse(
-          { ...data, faculty: Number(data.dean) },
+          { ...data, faculty: Number(data.faculty) },
           course.id as number,
         );
       }
@@ -167,6 +172,22 @@ const CourseForm = ({
                   )}
                 />
 
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="mb-2.5 block font-medium text-black dark:text-white">
+                        Description
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Description" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FacultyListDialog />
 
                 <FormField
@@ -192,8 +213,8 @@ const CourseForm = ({
                         </InputOTP>
                       </FormControl>
                       <FormDescription>
-                        Value must be unique and consistent with the Course the
-                        where the program belongs.
+                        Value must be unique and consistent with the program
+                        where the course belongs.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

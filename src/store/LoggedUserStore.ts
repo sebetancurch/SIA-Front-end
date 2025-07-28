@@ -1,14 +1,18 @@
 import { create } from "zustand";
 import { persist, PersistStorage, StorageValue } from "zustand/middleware";
-import { Navigation } from "@/types/navigation";
 import { User } from "@/types/user";
-import { getUserDataByToken } from "@/services/user";
+import { getUserDataByToken, logout } from "@/services/user";
+import { Navigation } from "@/types/navigation";
 
 interface AuthState {
-  navigationData: Navigation[] | null;
   userData: User | null;
-  setNavigationData: (data: Navigation[]) => void;
+  navigationData: Navigation[] | null;
+  // accessToken: string | null;
   setUserData: (data: User) => void;
+  setNavigationData: (data: Navigation[]) => void;
+  // setAccessToken: (token: string) => void;
+  setLogin: (user: User, navigation: Navigation[], accessToken?: string) => void;
+  clearAuth: () => void;
   fetchUserData: () => Promise<void>;
 }
 
@@ -25,24 +29,37 @@ const customStorage: PersistStorage<AuthState> = {
   },
 };
 
-const useStore = create<AuthState>()(
+export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      navigationData: null,
       userData: null,
-      setNavigationData: (data) => set({ navigationData: data }),
+      // accessToken: null,
+      navigationData: null,
       setUserData: (data) => set({ userData: data }),
+      setNavigationData: (data) => set({ navigationData: data }),
+      // setAccessToken: (token) => set({ accessToken: token }),
+      setLogin: (user, navigation, accessToken?) => {
+        set({
+          userData: user,
+          navigationData: navigation,
+          // accessToken: accessToken,
+        });
+      },
+      clearAuth: () => set({ userData: null, navigationData: null, 
+        // accessToken: null 
+        }),
       fetchUserData: async () => {
         try {
           const data = await getUserDataByToken();
           set({
-            userData: data.content?.user,
+            userData: data.content?.user,   
             navigationData: data.content?.navigation,
           });
         } catch (error) {
           console.error("Failed to fetch user data", error);
           // Optionally, you could clear the state here if the fetch fails
-          // set({ userData: null, navigationData: null });
+          set({ userData: null, navigationData: null });
+          logout();
         }
       },
     }),
@@ -53,4 +70,4 @@ const useStore = create<AuthState>()(
   ),
 );
 
-export default useStore;
+export default useAuthStore;

@@ -47,7 +47,7 @@ const formSchema = z.object({
     message: "Write a correct email",
   }),
   code: z.string().min(6, {
-    message: "Your one-time password must be 6 characters.",
+    message: "The faculty code must be 6 characters.",
   }),
 });
 

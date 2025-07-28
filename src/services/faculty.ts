@@ -2,7 +2,6 @@
 
 import { azureUrls } from "./urls";
 import { ListRequest, ListResponse } from "@/types/list-request";
-import { getSessionToken } from "@/actions/login-actions";
 import { Faculty } from "@/types/faculty";
 import { Response } from "@/types/response";
 import axiosInstance from "@/lib/axios";

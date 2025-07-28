@@ -1,15 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { ProfileForm } from "@/app/settings/profile-form";
-import { User } from "@/types/user";
-import { getSessionToken } from "@/actions/login-actions";
 
-const timeOut = async () => {
-  return await new Promise((resolve) => setTimeout(resolve, 10000));
-};
 export default async function SettingsProfilePage() {
-  // const sessionToken = await getSessionToken();
-  // const user = await timeOut();
-
   return (
     <div className="flex flex-col justify-center space-y-6 lg:max-w-xl">
       <div>

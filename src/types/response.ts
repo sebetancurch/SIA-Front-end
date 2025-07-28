@@ -13,6 +13,6 @@ export interface Response<T> {
 export interface LoginResponse {
   user: User;
   navigation: Navigation[];
-  token: string;
+  accessToken: string;
   refreshToken: string;
 }

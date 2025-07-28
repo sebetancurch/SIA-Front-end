@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import useStore from "@/store/LoggedUserStore";
+import useAuthStore from "@/store/LoggedUserStore";
 
 const SyncComponent = () => {
-  const fetchNavigationData = useStore((state) => state.fetchUserData);
+  const fetchNavigationData = useAuthStore((state) => state.fetchUserData);
 
   useEffect(() => {
     const syncData = async () => {
